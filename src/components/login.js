@@ -37,6 +37,8 @@ const Login = () => {
         window.localStorage.setItem("token", response.data.token)
         window.localStorage.setItem("name",response.data.username)
         window.localStorage.setItem("role",response.data.role)
+        window.localStorage.setItem("userId",response.data.id)
+        window.localStorage.setItem("load","firstload")
         if (response.data.role === "superadmin"){
 
           history.push("/admin_pannel");
@@ -96,17 +98,19 @@ const Login = () => {
               type="button"
               className="fadeIn fourth"
               value="Login"
+              id="lgn-btn"
               onClick={handleSubmit}
             ></input>
             <h4>{errmsg}</h4>
 
           </form>
-
+          <Link to ="/forgotpass">
           <div id="formFooter">
             <a className="underlineHover" href="#" style={{textDecoration: "none",color: "black"}}>
               Forgot Password?
             </a>
           </div>
+          </Link>
         </div>
       </div>
     </div>

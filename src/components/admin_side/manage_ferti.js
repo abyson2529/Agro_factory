@@ -13,50 +13,35 @@ const token = window.localStorage.getItem("token");
 const tokenVal = window.localStorage.getItem("token");
 
 function Manage_ferti() {
+
   const [users, setUsers] = useState([]);
-
-  const [show, setShow] = useState(false);
-
   const [name, setName] = useState(null);
   const [price, setPrice] = useState(null);
-  const [desc, setDesc] = useState(null);
+  const [description, setDescription] = useState(null);
   const [quantity, setQuantity] = useState(null);
-  const [image, setImage] = useState(null);
 
+  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  async function handleCreateFertilizer(e) {
-     let data = {
-       name: name,
-       price: price,
-       desc: desc,
-       quantity: quantity,
-     };
+  const [file,setfile] = useState();
+  const [filename, setFileName] = useState("");
+  async function handleCreateFertilizer() {
+    const formData = new FormData();
+
+    formData.append("file",file);
+    formData.append("filename",filename);
+    formData.append("name",name);
+    formData.append("price",price);
+    formData.append("desc",description);
+    formData.append("quantity",quantity);
+    console.log(formData);
      let response = await axios.post(
-       "http://localhost:4000/superadmin/addFertilizer",
-       data,
+       "http://localhost:4000/superadmin/addFertilizer",formData,
        {
         headers: { Authorization: token },
        }
       );
-    // e.preventDefault();
-    // var formData = new FormData();
-    // for (const key of Object.keys(image)) {
-    //   formData.append("coverImage", image[key]);
-    // }
-    // formData.append("name", name);
-    // formData.append("price", price);
-    // formData.append("desc", desc);
-    // formData.append("quantity", quantity);
-    // console.log(formData);
-
-    // const response = await axios({
-    //   method: "POST",
-    //   url: "http://localhost:4000/superadmin/addFertilizer",
-    //   data: formData,
-    //   headers: { "Content-Type": "multipart/form-data" },
-    // });
 
     handleClose();
     getFertilizers();
@@ -84,6 +69,8 @@ function Manage_ferti() {
       setUsers(response.data.response);
     }
   }
+
+
 
   useEffect(() => {
     getFertilizers();
@@ -136,7 +123,7 @@ function Manage_ferti() {
                 <Form.Control
                   type="text"
                   placeholder="Description"
-                  onChange={(e) => setDesc(e.target.value)}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
                 <br />
                 <Form.Control
@@ -145,14 +132,13 @@ function Manage_ferti() {
                   onChange={(e) => setQuantity(e.target.value)}
                 />
                 <br />
-                {/* <Form.Group controlId="formFile" style={{ fontSize: "18px" }}>
+                <Form.Group controlId="formFile" style={{fontSize: "18px"}}>
                   <Form.Label>Product Image</Form.Label>
-                  <Form.Control
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setImage(e.target.files)}
-                  />
-                </Form.Group> */}
+                  <Form.Control type="file"  onChange={(event)=> {
+                    setfile(event.target.files[0]);
+                    setFileName(event.target.files[0].name);
+                  }}/>
+                </Form.Group>
               </form>
             </Modal.Body>
             <Modal.Footer>

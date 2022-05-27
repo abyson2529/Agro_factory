@@ -10,7 +10,7 @@ const side_nav = () => {
         <header className="header" role="banner">
           <h1 className="logo">
             <a href="/admin_pannel">
-              Admin <span>Pannel</span>
+              Admin <span>Panel</span>
             </a>
           </h1>
           <div className="nav-wrap">

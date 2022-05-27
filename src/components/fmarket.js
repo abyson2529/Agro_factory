@@ -60,7 +60,7 @@ const fmarket = () => {
             </Link>
           </div>
         </div>
-        <div className="my-icon"  style={{marginTop: "37px"}}>
+        {/* <div className="my-icon"  style={{marginTop: "37px"}}>
           <div>
             <figure>
               <img src={milk} />
@@ -79,7 +79,7 @@ const fmarket = () => {
               <button className="btn-dash" style={{marginLeft: "20px",marginTop: "20px"}}>Baked Goods</button>
             </Link>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

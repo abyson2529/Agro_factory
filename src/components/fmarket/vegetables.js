@@ -12,13 +12,14 @@ import {
 } from "react-bootstrap";
 const axios = require('axios')
 
+const token = window.localStorage.getItem("token");
+
 const tokenVal = window.localStorage.getItem("token")
 const Vegetables = () => {
 
-  // const [show, setShow] = useState(false);
-
- // const handleClose = () => setShow(false);
- // const handleShow = () => setShow(true);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const history = useHistory();
   const [fertilizer,setFertilizer] = useState([]);
@@ -39,61 +40,70 @@ const Vegetables = () => {
     }
   }
 
+  async function handleAddCart(fertilizerId){
+    let userId = window.localStorage.getItem('userId')
+    let data = {
+        userId:userId,
+        productId:fertilizerId,
+        quantity:1,
+        category:"fertilizer"
+    }
+    let response = await axios.post(
+      "http://localhost:4000/superadmin/addCart",data,
+      {
+        headers: { Authorization: token },
+      }
+    ); 
+  }
+
   useEffect(() => {
     getFertilizers();
   }, []);
   return (
     <div>
       <Header/>
-   {/*}   <Button
-            onClick={handleShow}
-            style={{ width: "10rem", margin: "1rem",backgroundColor: "#3EFB9F",color: "black",border:"none" }}
-          >
-            Add Product
-          </Button> 
-          <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Product</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        <form>
-                <Form.Control type="text" placeholder="Product Name" />
-                <br />
-                <Form.Control type="text" placeholder="Price" />
-                <br />
-                <Form.Control type="text" placeholder="Description" />
-                <br />
-                <Form.Control type="text" placeholder="Quantity in KG :" />
-                <br />
-                <Form.Group controlId="formFile" style={{fontSize: "18px"}}>
-                  <Form.Label>Product Image</Form.Label>
-                  <Form.Control type="file" />
-                </Form.Group>
-              </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
-            Add Product
-          </Button>
-        </Modal.Footer>
-  </Modal>  */}
+  
          
       <div class="listing-section" style={{fontSize: "130%"}}>
       {fertilizer &&
                 fertilizer.length > 0 &&
                 fertilizer.map((p) => {
+
+                  var url ="http://localhost:4000/Controllers/Images/"+p.imagename;
+
                   return (<div>
                     <div className="product">
                     <div className="image-box">
-                    <img className="images"  src={Ferti1}  />
+                    <img className="images" async src={url}   />
                     </div>
                     <div className="text-box">
-                      <h2 className="item">{p.name}</h2>
-                      <h3 className="price">RS :{p.price}</h3>
+                      <h2 className="item" style={{marginBottom: "-10px" }}>{p.name}</h2>
+                      <h3 className="price">{p.price}</h3>
                       <p className="description">{p.desc}</p>
-                      <label htmlFor="item-1-quantity">Quantity:</label>
-          <input className="proInput" type="text" name="item-1-quantity" id="item-1-quantity" defaultValue={1} />
-                      <button type="button" name="item-1-button" id="item-1-button" onClick ={()=>handleCart()}>Add to Cart</button>
+                      {/* <label htmlFor="item-1-quantity">Quantity:</label>
+          <input className="proInput" type="text" name="item-1-quantity" id="item-1-quantity" defaultValue={1} /> */}
+                      <button type="button" name="item-1-button" id="item-1-button" onClick={handleShow}>View More</button>
+                      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>GARDENIA ORGANIC MANURE </Modal.Title>
+        </Modal.Header>
+        <img async src={url}  alt="" />
+        <Modal.Body>
+        {p.desc}
+           </Modal.Body>
+        <Modal.Footer>
+        <Link to="/vegetables">
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          </Link>
+          <Link to="/sample">
+          <Button variant="primary" onClick ={()=>handleAddCart(p._id)}>
+            Add To Cart
+          </Button>
+          </Link>
+        </Modal.Footer>
+      </Modal>
                     </div>
                   </div>
                   </div>

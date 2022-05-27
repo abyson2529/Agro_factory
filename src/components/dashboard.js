@@ -10,8 +10,19 @@ import LoginHeader from "../components/login-head";
 
 
 const tokenVal = window.localStorage.getItem("token")
+const firstLoad=window.localStorage.getItem("load")
+if(firstLoad=="firstload"){
+  window.location.reload(false);
+  window.localStorage.removeItem("load");
+}
+  
 
-const dashboard = () => {
+const Dashboard = () => {
+  // useEffect(() => {
+  //   window.location.reload(false);
+  //   return 0;
+    
+  // }, []);
   return (
     <div >
       {tokenVal? <Header/>:<LoginHeader/>}
@@ -285,4 +296,4 @@ const dashboard = () => {
   );
 };
 
-export default dashboard;
+export default Dashboard;

@@ -36,9 +36,10 @@ const News = () => {
       {news &&
                 news.length > 0 &&
                 news.map((p) => {
+                  var url ="http://localhost:4000/Controllers/Images/"+p.imagename;
                   return (
                     <figure className="news_hor">
-                    <img src={News1} alt="" />
+                    <img async src={url}  alt="" />
                     <figcaption>
                       <h3>{p.title}</h3>
                       <p>{p.description}</p>

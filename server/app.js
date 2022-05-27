@@ -11,6 +11,10 @@ const SuperadminRoute = require("./routes/superadmincontrols");
 const UserRoute = require("./routes/userRoute");
 const Authroute = require("./routes/authentication");
 
+//images
+
+
+
 mongoose.connect("mongodb://localhost:27017/S9MiniProject", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -41,6 +45,10 @@ app.use(
   })
 );
 app.use(express.static("H:/org_project/Agro_factory/Node-basic/routes/images/"));
+//images
+app.use(express.static('public')); 
+app.use('/images', express.static('images'));
+app.use('/Controllers/Images', express.static('Controllers/Images'));
 
 const port = process.env.PORT || 4000;
 
@@ -51,3 +59,4 @@ app.listen(port, () => {
 app.use("/api", Authroute);
 app.use("/superadmin", SuperadminRoute);
 app.use("/user", UserRoute);
+

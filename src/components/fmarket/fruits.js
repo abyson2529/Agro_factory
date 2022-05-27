@@ -30,16 +30,29 @@ const Fruits = () => {
   const handleShow = () => setShow(true);
   const role = window.localStorage.getItem("role")
 
+  const [file,setfile] = useState();
+  const [filename, setFileName] = useState("");
+
   async function handleCreateFruits(){
-    let data = {
-        name:name,
-        price:price,
-        desc:description,
-        quantity:quantity
-    }
-    console.log(data)
+    const formData = new FormData();
+
+    formData.append("file",file);
+    formData.append("filename",filename);
+    formData.append("name",name);
+    formData.append("price",price);
+    formData.append("desc",description);
+    formData.append("quantity",quantity);
+    console.log(formData);
+
+    // let data = {
+    //     name:name,
+    //     price:price,
+    //     desc:description,
+    //     quantity:quantity
+    // }
+    // console.log(data)
     let response = await axios.post(
-      "http://localhost:4000/superadmin/addFruit",data,
+      "http://localhost:4000/superadmin/addFruit",formData,
       {
         headers: { Authorization: token },
       }
@@ -74,6 +87,22 @@ async function deleteFruits(id){
     }
   }
 
+  async function handleAddCart(fruitId){
+    let userId = window.localStorage.getItem('userId')
+    let data = {
+        userId:userId,
+        productId:fruitId,
+        quantity:1,
+        category:"fruits"
+    }
+    let response = await axios.post(
+      "http://localhost:4000/superadmin/addCart",data,
+      {
+        headers: { Authorization: token },
+      }
+    ); 
+  }
+
   useEffect(() => {
     getFruit();
   }, []);
@@ -106,7 +135,10 @@ async function deleteFruits(id){
                 <br />
                 <Form.Group controlId="formFile" style={{fontSize: "18px"}}>
                   <Form.Label>Product Image</Form.Label>
-                  <Form.Control type="file" />
+                  <Form.Control type="file"  onChange={(event)=> {
+                    setfile(event.target.files[0]);
+                    setFileName(event.target.files[0].name);
+                  }}/>
                 </Form.Group>
               </form>
             </Modal.Body>
@@ -121,19 +153,24 @@ async function deleteFruits(id){
       {fruits &&
                 fruits.length > 0 &&
                 fruits.map((p) => {
+
+                  var url ="http://localhost:4000/Controllers/Images/"+p.imagename;
+
                   return (<div>
                     <div className="product">
                     <div className="image-box">
-                    <img className="images"  src={Apple1}  />
+                    <img className="images"  async src={url}   />
                     </div>
                     <div className="text-box">
                       <h2 className="item">{p.name}</h2>
                       <h3 className="price">RS :{p.price}</h3>
                       <p className="description">{p.desc}</p>
-                      <label htmlFor="item-1-quantity">Quantity:</label>
-          <input className="proInput" type="text" name="item-1-quantity" id="item-1-quantity" defaultValue={1} />
-                    <Link to="/sample">
-                      <button type="button" name="item-1-button" id="item-1-button" onClick ={()=>handleCart()}>Add to Cart</button>
+                      
+                   
+                      <Link to="/sample">
+                      <Button variant="primary" onClick ={()=>handleAddCart(p._id)}>
+                      Add To Cart
+                      </Button>
                       </Link>
                     </div>
                   </div>

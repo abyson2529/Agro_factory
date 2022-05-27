@@ -12,8 +12,14 @@ import {
 } from "react-bootstrap";
 const axios = require('axios')
 
+const token = window.localStorage.getItem("token");
+
 const tokenVal = window.localStorage.getItem("token")
 const Seeds = () => {
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const history = useHistory();
   const [seeds,setSeeds] = useState([]);
@@ -34,6 +40,22 @@ const Seeds = () => {
     }
   }
 
+  async function handleAddCart(seedId){
+    let userId = window.localStorage.getItem('userId')
+    let data = {
+        userId:userId,
+        productId:seedId,
+        quantity:1,
+        category:"seeds"
+    }
+    let response = await axios.post(
+      "http://localhost:4000/superadmin/addCart",data,
+      {
+        headers: { Authorization: token },
+      }
+    ); 
+  }
+
   useEffect(() => {
     getSeed();
   }, []);
@@ -46,18 +68,44 @@ const Seeds = () => {
       {seeds &&
                 seeds.length > 0 &&
                 seeds.map((p) => {
+                  
+                  var url ="http://localhost:4000/Controllers/Images/"+p.imagename;
                   return (<div>
                     <div className="product">
                     <div className="image-box">
-                    <img className="images"  src={Seed1}  />
+                    <img className="images"  async src={url}  />
                     </div>
                     <div className="text-box">
                       <h2 className="item">{p.name}</h2>
                       <h3 className="price">RS :{p.price}</h3>
                       <p className="description">{p.desc}</p>
-                      <label htmlFor="item-1-quantity">Quantity:</label>
-          <input className="proInput" type="text" name="item-1-quantity" id="item-1-quantity" defaultValue={1} />
-                      <button type="button" name="item-1-button" id="item-1-button" onClick ={()=>handleCart()}>Add to Cart</button>
+                      {/* <label htmlFor="item-1-quantity">Quantity:</label>
+          <input className="proInput" type="text" name="item-1-quantity" id="item-1-quantity" defaultValue={1} /> */}
+                      <button type="button" name="item-1-button" id="item-1-button" onClick={handleShow}>View More</button>
+
+                      <Modal show={show} onHide={handleClose}>
+                      <Modal.Header closeButton>
+          <Modal.Title>{p.name} </Modal.Title>
+        </Modal.Header>
+        <img async src={url} alt="" />
+        <Modal.Body>
+        <Modal.Title>{p.name} </Modal.Title>
+        <Modal.Title>{p.price} </Modal.Title>
+        {p.desc}</Modal.Body>
+        <Modal.Footer>
+        <Link to="/vegetables">
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          </Link>
+          <Link to="/sample">
+          <Button variant="primary" onClick ={()=>handleAddCart(p._id)}>
+            Add To Cart
+          </Button>
+          </Link>
+        </Modal.Footer>
+        </Modal>
+
                     </div>
                   </div>
                   </div>

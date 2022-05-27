@@ -1,5 +1,10 @@
 const Product = require("../Models/product");
 const Fertilizer = require("../Models/fertilizer");
+//image upload
+const fileupload = require('express-fileupload')
+const express =require ("express")
+const app = express()
+app.use(fileupload())
 
 //Show List of Products
 const index = async (req, res, next) => {
@@ -18,6 +23,21 @@ const index = async (req, res, next) => {
 //Show List of Fertilizer
 const showFertilizer = async (req, res, next) => {
   Fertilizer.find()
+    .then((response) => {
+      return res.status(200).send({
+        response,
+      });
+    })
+    .catch((error) => {
+      return res.status(500).send({
+        message: error.message,
+      });
+    });
+};
+
+//Show List of fertilizer
+const showFertilizerById = async (req, res, next) => {
+  Fertilizer.findById(req.body.FertilizerId)
     .then((response) => {
       return res.status(200).send({
         response,
@@ -86,11 +106,18 @@ const addProduct = async (req, res, next) => {
 };
 //Add Fertilizers
 const addFertilizer = async (req, res, next) => {
+
+  const img_name = Date.now()+req.body.filename;
+  const file = req.files.file;
+  const newpath = __dirname + "/Images/";
+  console.log(req.body);
+
   let fertilizer = new Fertilizer({
     name:req.body.name,
     price:req.body.price,
     desc:req.body.desc,
     quantity:req.body.quantity,
+    imagename:img_name,
   });
   fertilizer
     .save()
@@ -104,41 +131,13 @@ const addFertilizer = async (req, res, next) => {
         message: error.message,
       });
     });
-  // let imgArr = []
-  
-  // if (req.files) {
-  //   let coverImage = req.files.coverImage;
-  //   console.log("HI",coverImage);
-  //   coverImage.forEach(cover =>{
-  //     let coverName = Date.now();
-  //     cover.mv("H:/org_project/Agro_factory/Node-basic/routes/images/" + coverName + ".jpg");
-  //     imgArr.push(coverName + ".jpg")
-  //   })
-  // }
-
-  // let Courses = new Fertilizer({
-  //   name: req.body.name,
-  //   price: req.body.price,
-  //   desc: req.body.desc,
-  //   quantity: req.body.quantity,
-  //   courseVideos: imgArr,
-  // });
-
-  // console.log("My" + Courses);
-
-  // Courses
-  //   .save()
-  //   .then((Fertilizer => {
-  //     return res.status(200).send({
-  //       message: Fertilizer,
-  //     });
-  //   })
-  //   )
-  //   .catch((error) => {
-  //     return res.status(500).send({
-  //       message: error.message,
-  //     });
-  //   });
+  //image upload
+  file.mv(`${newpath}${img_name}`,(err)=>{
+    if(err){
+      console.log(err);
+       
+        }
+  })
 };
 
 //Update Fertilizer
@@ -203,5 +202,6 @@ module.exports = {
   showFertilizer,
   deleteFertilizer,
   addFertilizer,
-  updateFertilizer
+  updateFertilizer,
+  showFertilizerById
 };

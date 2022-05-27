@@ -21,15 +21,25 @@ function Manage_news() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [file,setfile] = useState();
+  const [filename, setFileName] = useState("");
+
   async function handleCreateNews(){
-    let data = {
-        title:title,
-        description:description,
-        date:date
-    }
-    console.log(data)
+    const formData = new FormData();
+    // let data = {
+    //     title:title,
+    //     description:description,
+    //     date:date
+    // }
+    // console.log(data)
+    formData.append("file",file);
+    formData.append("filename",filename);
+    formData.append("title",title);
+    formData.append("description",description);
+    formData.append("date",date);
+    console.log(formData);
     let response = await axios.post(
-      "http://localhost:4000/superadmin/addNews",data,
+      "http://localhost:4000/superadmin/addNews",formData,
       {
         headers: { Authorization: token },
       }
@@ -103,8 +113,11 @@ async function deleteNews(id){
                 <Form.Control type="text" placeholder="Date" onChange={(e)=>setDate(e.target.value)} />
                 <br />
                 <Form.Group controlId="formFile" style={{fontSize: "18px"}}>
-                  <Form.Label>Image</Form.Label>
-                  <Form.Control type="file" />
+                  <Form.Label>Product Image</Form.Label>
+                  <Form.Control type="file"  onChange={(event)=> {
+                    setfile(event.target.files[0]);
+                    setFileName(event.target.files[0].name);
+                  }}/>
                 </Form.Group>
               </form>
             </Modal.Body>

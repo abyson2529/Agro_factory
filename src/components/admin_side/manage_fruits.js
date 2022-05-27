@@ -22,16 +22,29 @@ function Manage_fruits() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [file,setfile] = useState();
+  const [filename, setFileName] = useState("");
+
   async function handleCreateFruits(){
-    let data = {
-        name:name,
-        price:price,
-        desc:description,
-        quantity:quantity
-    }
-    console.log(data)
+    const formData = new FormData();
+
+    formData.append("file",file);
+    formData.append("filename",filename);
+    formData.append("name",name);
+    formData.append("price",price);
+    formData.append("desc",description);
+    formData.append("quantity",quantity);
+    console.log(formData);
+
+    // let data = {
+    //     name:name,
+    //     price:price,
+    //     desc:description,
+    //     quantity:quantity
+    // }
+    // console.log(data)
     let response = await axios.post(
-      "http://localhost:4000/superadmin/addFruit",data,
+      "http://localhost:4000/superadmin/addFruit",formData,
       {
         headers: { Authorization: token },
       }
@@ -60,6 +73,8 @@ async function deleteFruits(id){
       setUsers(response.data.response);
     }
   }
+
+
 
   useEffect(() => {
     getFruit();
@@ -100,7 +115,7 @@ async function deleteFruits(id){
               <form>
                 <Form.Control type="text" placeholder="Product Name"onChange={(e)=>setName(e.target.value)} />
                 <br />
-                <Form.Control type="text" placeholder=" Product Price" onChange={(e)=>setPrice(e.target.value)}/>
+                <Form.Control type="number" placeholder=" Product Price" onChange={(e)=>setPrice(e.target.value)}/>
                 <br />
                 <Form.Control type="text" placeholder="Description" onChange={(e)=>setDescription(e.target.value)}/>
                 <br />
@@ -108,7 +123,10 @@ async function deleteFruits(id){
                 <br />
                 <Form.Group controlId="formFile" style={{fontSize: "18px"}}>
                   <Form.Label>Product Image</Form.Label>
-                  <Form.Control type="file" />
+                  <Form.Control type="file"  onChange={(event)=> {
+                    setfile(event.target.files[0]);
+                    setFileName(event.target.files[0].name);
+                  }}/>
                 </Form.Group>
               </form>
             </Modal.Body>

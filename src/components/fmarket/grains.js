@@ -12,11 +12,48 @@ import {
 } from "react-bootstrap";
 const axios = require('axios')
 
+const token = window.localStorage.getItem("token");
+
 const tokenVal = window.localStorage.getItem("token")
 const Grains = () => {
 
   const history = useHistory();
   const [grains,setGrains] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [name, setName] = useState(false)
+  const [price, setPrice] = useState(false)
+  const [description, setDescription] = useState(false)
+  const [quantity, setQuantity] = useState(false)
+  
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const role = window.localStorage.getItem("role")
+
+  const [file,setfile] = useState();
+  const [filename, setFileName] = useState("");
+
+  async function handleCreateGrains(){
+    const formData = new FormData();
+
+    formData.append("file",file);
+    formData.append("filename",filename);
+    formData.append("name",name);
+    formData.append("price",price);
+    formData.append("desc",description);
+    formData.append("quantity",quantity);
+    console.log(formData);
+
+    let response = await axios.post(
+      "http://localhost:4000/superadmin/addGrain",formData,
+      {
+        headers: { Authorization: token },
+      }
+    );  
+    handleClose()
+    getGrain()
+}
+
   async function getGrain() {
     let response = await axios.get(
       "http://localhost:4000/superadmin/showGrain",
@@ -34,6 +71,22 @@ const Grains = () => {
     }
   }
 
+  async function handleAddCart(grainId){
+    let userId = window.localStorage.getItem('userId')
+    let data = {
+        userId:userId,
+        productId:grainId,
+        quantity:1,
+        category:"grains"
+    }
+    let response = await axios.post(
+      "http://localhost:4000/superadmin/addCart",data,
+      {
+        headers: { Authorization: token },
+      }
+    ); 
+  }
+
   useEffect(() => {
     getGrain();
   }, []);
@@ -41,23 +94,64 @@ const Grains = () => {
     <div>
       <Header/>
      
+      {role && role=='farmer'?
+      <Button
+            variant="primary"
+            onClick={handleShow}
+            style={{ width: "10rem", margin: "1rem" }}
+          >
+            Add Grains
+          </Button>:<div></div>
+      }
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Add Grains</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <form>
+                <Form.Control type="text" placeholder="Product Name"onChange={(e)=>setName(e.target.value)} />
+                <br />
+                <Form.Control type="text" placeholder=" Product Price" onChange={(e)=>setPrice(e.target.value)}/>
+                <br />
+                <Form.Control type="text" placeholder="Description" onChange={(e)=>setDescription(e.target.value)}/>
+                <br />
+                <Form.Control type="text" placeholder="Quantity" onChange={(e)=>setQuantity(e.target.value)}/>
+                <br />
+                <Form.Group controlId="formFile" style={{fontSize: "18px"}}>
+                  <Form.Label>Product Image</Form.Label>
+                  <Form.Control type="file"  onChange={(event)=> {
+                    setfile(event.target.files[0]);
+                    setFileName(event.target.files[0].name);
+                  }}/>
+                </Form.Group>
+              </form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" onClick={handleCreateGrains}>
+              Add Grains
+              </Button>
+            </Modal.Footer>
+          </Modal>
          
       <div class="listing-section" style={{fontSize: "130%"}}>
       {grains &&
                 grains.length > 0 &&
                 grains.map((p) => {
+                  var url ="http://localhost:4000/Controllers/Images/"+p.imagename;
                   return (<div>
                     <div className="product">
                     <div className="image-box">
-                    <img className="images"  src={seed1}  />
+                    <img className="images"  async src={url} />
                     </div>
                     <div className="text-box">
                       <h2 className="item">{p.name}</h2>
                       <h3 className="price">RS :{p.price}</h3>
                       <p className="description">{p.desc}</p>
-                      <label htmlFor="item-1-quantity">Quantity:</label>
-          <input className="proInput" type="text" name="item-1-quantity" id="item-1-quantity" defaultValue={1} />
-                      <button type="button" name="item-1-button" id="item-1-button" onClick ={()=>handleCart()}>Add to Cart</button>
+                      <Link to="/sample">
+                      <Button variant="primary" onClick ={()=>handleAddCart(p._id)}>
+                      Add To Cart
+                      </Button>
+                      </Link>
                     </div>
                   </div>
                   </div>

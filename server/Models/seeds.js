@@ -6,12 +6,16 @@ const seedSchema = new mongoose.Schema(
       type: String,
     },
     price: {
-      type: String,
+      type: Number,
     },
     desc: {
       type: String,
     },
     quantity:{
+        type: String
+    }
+    ,
+    imagename:{
         type: String
     }
   },

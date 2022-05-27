@@ -1,8 +1,28 @@
 const Fruit = require("../Models/fruits");
 
+//image upload
+const fileupload = require('express-fileupload')
+const express =require ("express")
+const app = express()
+app.use(fileupload())
+
 //Show List of Fruits
 const showFruit = async (req, res, next) => {
   Fruit.find()
+    .then((response) => {
+      return res.status(200).send({
+        response,
+      });
+    })
+    .catch((error) => {
+      return res.status(500).send({
+        message: error.message,
+      });
+    });
+};
+//Show List of Fruits
+const showFruitById = async (req, res, next) => {
+  Fruit.findById(req.body.fruitId)
     .then((response) => {
       return res.status(200).send({
         response,
@@ -21,11 +41,18 @@ const showFruit = async (req, res, next) => {
 
 //Add Fruits
 const addFruit = async (req, res, next) => {
+
+  const img_name = Date.now()+req.body.filename;
+  const file = req.files.file;
+  const newpath = __dirname + "/Images/";
+  console.log(req.body);
+
   let fertilizer = new Fruit({
     name:req.body.name,
     price:req.body.price,
     desc:req.body.desc,
     quantity:req.body.quantity,
+    imagename:img_name,
   });
   fertilizer
     .save()
@@ -39,6 +66,14 @@ const addFruit = async (req, res, next) => {
         message: error.message,
       });
     });
+    //image upload
+    file.mv(`${newpath}${img_name}`,(err)=>{
+      if(err){
+        console.log(err);
+         
+          }
+    })
+
 };
 
 //Update Fruit
@@ -84,5 +119,6 @@ module.exports = {
   showFruit,
   deleteFruit,
   addFruit,
-  updateFruit
+  updateFruit,
+  showFruitById
 };

@@ -14,7 +14,8 @@ const seedController = require("../Controllers/seedsController");
 const fruitController = require("../Controllers/fruitsController");
 const grainController = require("../Controllers/grainsController");
 const newsController = require("../Controllers/newsController");
-const agriClassController = require("../Controllers/agriClassController");
+const agriClassController = require("../Controllers/agriClassController");            
+const cartController = require("../Controllers/cartController");            
 
 /*To access these routes admin authentication is needed in the header............User should be an admin*/
 /*To do so, copy the token of the admin when you login and paste it in the header with name Authorization and value as Bearer 'tokenvalue'*/
@@ -72,26 +73,31 @@ router.get("/showFertilizers", productController.showFertilizer);
 router.post("/deleteFertilizer", productController.deleteFertilizer);
 router.post("/addFertilizer", productController.addFertilizer);
 router.post("/updateFertilizer", productController.updateFertilizer);
+router.post("/showFertilizerId", productController.showFertilizerById);
 //Machinery
 router.get("/showMachinery", machineryController.showMachinery);
 router.post("/deleteMachinery", machineryController.deleteMachinery);
 router.post("/addMachinery", machineryController.addMachinery);
 router.post("/updateMachinery", machineryController.updateMachinery);
+router.post("/showMachineryId", machineryController.showMachineryById);
 //Seed
 router.get("/showSeed", seedController.showSeed);
 router.post("/deleteSeed", seedController.deleteSeed);
 router.post("/addSeed", seedController.addSeed);
 router.post("/updateSeed", seedController.updateSeed);
+router.post("/showSeedId", seedController.showSeedById);
 //Fruits
 router.get("/showFruit", fruitController.showFruit);
 router.post("/deleteFruit", fruitController.deleteFruit);
 router.post("/addFruit", fruitController.addFruit);
 router.post("/updateFruit", fruitController.updateFruit);
+router.post("/showFruitId", fruitController.showFruitById);
 //Grains
 router.get("/showGrain", grainController.showGrain);
 router.post("/deleteGrain", grainController.deleteGrain);
 router.post("/addGrain", grainController.addGrain);
 router.post("/updateGrain", grainController.updateGrain);
+router.post("/showGrainId", grainController.showGrainById);
 //AgriClass
 router.get("/showAgriClass", agriClassController.showAgriClass);
 router.post("/deleteAgriClass", agriClassController.deleteAgriClass);
@@ -102,4 +108,9 @@ router.get("/showNews", newsController.showNews);
 router.post("/deleteNews", newsController.deleteNews);
 router.post("/addNews", newsController.addNews);
 router.post("/updateNews", newsController.updateNews);
+//cart
+router.post("/showCart", cartController.showCart);
+router.post("/deleteCart", cartController.deleteCart);
+router.post("/addCart", cartController.addCart);
+router.post("/updateCart", cartController.updateCart);
 module.exports = router;

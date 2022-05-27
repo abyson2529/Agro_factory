@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./components/login";
 import Signup from "./components/signup";
+import Forgotpass from "./components/forgotpass";
+import Resetpass from "./components/resetpass";
 import Home from "./components/home";
 import Dashboard from "./components/dashboard";
 import Fmarket from "./components/fmarket";
@@ -9,6 +11,7 @@ import Machinery from "./components/fmarket/machinery";
 import Seeds from "./components/fmarket/seeds";
 import Fruits from "./components/fmarket/fruits";
 import Grains from "./components/fmarket/grains";
+import Milk from "./components/fmarket/veg";
 import Profile from "./components/profile";
 import Sample from "./components/sample";
 import Product_desc from "./components/product_desc";
@@ -38,6 +41,8 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
+          <Route path="/forgotpass" component={Forgotpass} />
+          <Route path="/resetpass" component={Resetpass} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/fmarket" component={Fmarket} />
           <Route path="/vegetables" component={Vegetables} />
@@ -45,6 +50,7 @@ function App() {
           <Route path="/seeds" component={Seeds} />
           <Route path="/fruits" component={Fruits} />
           <Route path="/grains" component={Grains} />
+          <Route path="/milk" component={Milk} />
           <Route path="/profile" component={Profile} />
           <Route path="/sample" component={Sample} />
           <Route path="/product_desc" component={Product_desc} />

@@ -22,16 +22,33 @@ function Manage_seeds() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  //image
+  const [file,setfile] = useState();
+  const [filename, setFileName] = useState("");
+
   async function handleCreateSeeds(){
-    let data = {
-        name:name,
-        price:price,
-        desc:description,
-        quantity:quantity
-    }
-    console.log(data)
+    const formData = new FormData();
+
+  //   let data = {
+  //     name:name,
+  //     price:price,
+  //     desc:description,
+  //     quantity:quantity,
+  //     fname:filename,
+  //     file:file
+
+  // }
+  // console.log(data)
+    formData.append("file",file);
+    formData.append("filename",filename);
+    formData.append("name",name);
+    formData.append("price",price);
+    formData.append("desc",description);
+    formData.append("quantity",quantity);
+    console.log(formData);
+  
     let response = await axios.post(
-      "http://localhost:4000/superadmin/addSeed",data,
+      "http://localhost:4000/superadmin/addSeed",formData,
       {
         headers: { Authorization: token },
       }
@@ -108,7 +125,10 @@ async function deleteSeeds(id){
                 <br />
                 <Form.Group controlId="formFile" style={{fontSize: "18px"}}>
                   <Form.Label>Product Image</Form.Label>
-                  <Form.Control type="file" />
+                  <Form.Control type="file"  onChange={(event)=> {
+                    setfile(event.target.files[0]);
+                    setFileName(event.target.files[0].name);
+                  }}/>
                 </Form.Group>
               </form>
             </Modal.Body>

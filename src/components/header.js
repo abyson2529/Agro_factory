@@ -26,11 +26,12 @@ const Header = () =>
             <Nav.Link href="/news">News</Nav.Link>
             <Nav.Link href="/aboutus">About Us</Nav.Link>
 
-
+            <Link to="/sample">
             <img
                   src={Cart}
                   style={{ height: "30px", width: "30px", marginLeft: "20px" }}
                 />
+                </Link>
                             
 
             <Dropdown style={{fontSize: "120%"}}>
@@ -39,7 +40,7 @@ const Header = () =>
                   src={User}
                   style={{ height: "30px", width: "30px", marginLeft: "20px" }}
                 />
-                <h6> {name}</h6>
+                <h6 id= {"lgn-name"}> {name}</h6>
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item href="/profile" >Profile</Dropdown.Item>

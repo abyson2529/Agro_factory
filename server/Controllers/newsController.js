@@ -1,4 +1,9 @@
 const News = require("../Models/news");
+//image upload
+const fileupload = require('express-fileupload')
+const express =require ("express")
+const app = express()
+app.use(fileupload())
 
 //Show List of Fertilizer
 const showNews = async (req, res, next) => {
@@ -19,13 +24,19 @@ const showNews = async (req, res, next) => {
 
 
 
-//Add Fertilizers
+//Add news
 const addNews = async (req, res, next) => {
+
+  const img_name = Date.now()+req.body.filename;
+  const file = req.files.file;
+  const newpath = __dirname + "/Images/";
+   console.log(req.body);
+
   let fertilizer = new News({
     title:req.body.title,
     description:req.body.description,
     date:req.body.date,
-    image:req.body.image,
+    imagename:img_name,
   });
   fertilizer
     .save()
@@ -39,6 +50,13 @@ const addNews = async (req, res, next) => {
         message: error.message,
       });
     });
+    //image upload
+    file.mv(`${newpath}${img_name}`,(err)=>{
+      if(err){
+        console.log(err);
+         
+          }
+    })
 };
 
 //Update Fertilizer

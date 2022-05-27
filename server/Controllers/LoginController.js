@@ -27,6 +27,7 @@ const login = (req, res, next) => {
                 token: "Bearer " + token,
                 role: user.role,
                 username:user.name,
+                id:user._id
               });
             } else {
               return res.status(500).send({
