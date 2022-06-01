@@ -20,6 +20,7 @@ const Sample = () => {
 
   const [cart,setCart] = useState([])
   const[quantity,setQuantity]=useState("1");
+  const [Load1,setLoad] = useState(0);
   const handleQuantity=(e)=>{
     setQuantity(e.target.value);
   }
@@ -109,6 +110,9 @@ const Sample = () => {
       "http://localhost:4000/superadmin/showCart",data
     );
     if (response.status === 200) {
+
+
+      
       let cartItems = response.data.message;
       for(let i = 0; i<cartItems.length;i++){
         if(cartItems[i].category == 'fruits'){
@@ -147,9 +151,15 @@ const Sample = () => {
 
   
   useEffect(() => {
-    getCart();
-  }, []);
+    console.log("useeffect called");
+    async function callcart(){
+    await getCart();
+    
+  }
+  callcart();
 
+  }, []);
+  console.log("items in cart "+ cart.length);
   return (
     <div >
       {tokenVal? <Header/>:<LoginHeader/>}
@@ -159,7 +169,8 @@ const Sample = () => {
           Shopping Bag
         </div>
         {/* Product #1 */}
-        {cart&&cart.length>0&&cart.map((a)=>{
+        {cart&&cart.map((a)=>{
+
           console.log("hii"+a);
          
             
