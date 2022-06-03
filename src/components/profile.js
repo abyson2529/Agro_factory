@@ -1,23 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import './profile.css'
-import Profile from "../assets/profile.png";
+import Profileimg from "../assets/profile.png";
 import Header from "../components/header"
 import LoginHeader from "../components/login-head";
 
+const axios = require("axios");
+const token = window.localStorage.getItem("token");
+const tokenVal = window.localStorage.getItem("token");
 
-const tokenVal = window.localStorage.getItem("token")
 
 
-const profile = () => {
+const Profile = () => {
+
+  const [users, setUsers] = useState([]);
+
+  async function getUsers() {
+    const username = window.localStorage.getItem("name");
+    const data={
+      username:username,
+    };
+    let response = await axios.post(
+      "http://localhost:4000/superadmin/userprofile",data,
+      {
+        headers: { Authorization: token },
+      }
+    );
+    if (response.status === 200) {
+     
+      setUsers(response.data.user)
+      
+    }
+  }
+  useEffect(() => {
+    getUsers();
+  }, []);
+ 
   return (
     <div>
       {tokenVal? <Header/>:<LoginHeader/>}
     <div className="container emp-profile">
+    {users &&
+        users.length > 0 &&
+        users.map((p) => {
+          return(
+
+         
     <form method="post">
       <div className="row">
         <div className="col-md-4">
           <div className="profile-img">
-            <img src={Profile} alt="" />
+            <img src={Profileimg} alt="" />
             <div className="file btn btn-lg btn-primary">
               Change Photo
               <input type="file" name="file" />
@@ -27,10 +59,10 @@ const profile = () => {
         <div className="col-md-6">
           <div className="profile-head">
             <h5>
-              Abyson mathew
+              {p.name}
             </h5>
             <h6>
-              Farmer
+              {p.role}
             </h6>
             <br />
             <br />
@@ -56,7 +88,7 @@ const profile = () => {
                   <label>User Id</label>
                 </div>
                 <div className="col-md-6">
-                  <p>Abyson</p>
+                  <p>{p.username}</p>
                 </div>
               </div>
               <div className="row">
@@ -64,7 +96,7 @@ const profile = () => {
                   <label>Name</label>
                 </div>
                 <div className="col-md-6">
-                  <p>Abyson Mathew</p>
+                  <p>{p.name}</p>
                 </div>
               </div>
               <div className="row">
@@ -72,7 +104,7 @@ const profile = () => {
                   <label>Email</label>
                 </div>
                 <div className="col-md-6">
-                  <p>abysonmathew@gmail.com</p>
+                  <p>{p.email}</p>
                 </div>
               </div>
               <div className="row">
@@ -80,7 +112,7 @@ const profile = () => {
                   <label>Phone</label>
                 </div>
                 <div className="col-md-6">
-                  <p>9072222529</p>
+                  <p>{p.phNum}</p>
                 </div>
               </div>
               <div className="row">
@@ -88,7 +120,7 @@ const profile = () => {
                   <label>User Type</label>
                 </div>
                 <div className="col-md-6">
-                  <p>Farmer</p>
+                  <p>{p.role}</p>
                 </div>
               </div>
             </div>
@@ -143,10 +175,12 @@ const profile = () => {
           </div>
         </div>
       </div>
-    </form>           
+    </form>  
+     );
+    })}         
   </div>
   </div>
   );
 };
 
-export default profile;
+export default Profile;

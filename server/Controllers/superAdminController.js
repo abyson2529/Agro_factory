@@ -18,6 +18,23 @@ const index = async (req, res, next) => {
       });
   }
 };
+//Show profile of Users new
+  const newshow = async (req, res, next) => {
+  await User.find({ username: req.user.username }).exec().then((response)=>{
+    if(response){
+      res.status(200).json({
+        user:response,
+      });
+    }
+    else{
+      return res.status(401).json({
+        message:"failed",
+      })
+    }
+  })
+      
+  
+};
 //Show List of Users
 const showCustomers = async (req, res, next) => {
   const user = await User.findOne({ username: req.user.username });
@@ -180,6 +197,7 @@ const reActivate = async (req, res, next) => {
 module.exports = {
   index,
   show,
+  newshow,
   store,
   update,
   destroy,

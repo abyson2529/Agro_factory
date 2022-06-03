@@ -22,6 +22,7 @@ const cartController = require("../Controllers/cartController");
 
 //Shows users
 router.get("/showUsers", Authenticate, UserController.index);
+router.post("/userprofile", Authenticate, UserController.newshow);
 router.get("/showFarmers", Authenticate, UserController.showFarmers);
 router.get("/showCustomers", Authenticate, UserController.showCustomers);
 
@@ -111,6 +112,10 @@ router.post("/updateNews", newsController.updateNews);
 //cart
 router.post("/showCart", cartController.showCart);
 router.post("/deleteCart", cartController.deleteCart);
+router.post("/getcartdata", cartController.getCart);
 router.post("/addCart", cartController.addCart);
 router.post("/updateCart", cartController.updateCart);
+router.post("/increasequantity", cartController.updateQuantity);
+router.post("/removequantity", cartController.removeQuantity);
+
 module.exports = router;

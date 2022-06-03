@@ -42,18 +42,25 @@ const Seeds = () => {
 
   async function handleAddCart(seedId){
     let userId = window.localStorage.getItem('userId')
-    let data = {
-        userId:userId,
-        productId:seedId,
-        quantity:1,
-        category:"seeds"
-    }
-    let response = await axios.post(
-      "http://localhost:4000/superadmin/addCart",data,
-      {
-        headers: { Authorization: token },
+    if(userId){
+      let data = {
+          userId:userId,
+          productId:seedId,
+          quantity:1,
+          category:"seeds"
       }
-    ); 
+      let response = await axios.post(
+        "http://localhost:4000/superadmin/addCart",data,
+        {
+          headers: { Authorization: token },
+        }
+      ); 
+      history.push("/sample")
+    }
+    else{
+      alert("Please Login to continue")
+      history.push("/login")
+    }
   }
 
   useEffect(() => {
@@ -98,7 +105,7 @@ const Seeds = () => {
             Close
           </Button>
           </Link>
-          <Link to="/sample">
+          <Link to="">
           <Button variant="primary" onClick ={()=>handleAddCart(p._id)}>
             Add To Cart
           </Button>

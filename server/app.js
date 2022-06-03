@@ -44,8 +44,9 @@ app.use(
     createParentPath: true,
   })
 );
-app.use(express.static("H:/org_project/Agro_factory/Node-basic/routes/images/"));
 //images
+app.use(express.static("H:/org_project/Agro_factory/Node-basic/routes/images/"));
+
 app.use(express.static('public')); 
 app.use('/images', express.static('images'));
 app.use('/Controllers/Images', express.static('Controllers/Images'));

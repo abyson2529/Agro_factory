@@ -71,7 +71,7 @@ const deleteCart = async (req, res, next) => {
   Cart.findByIdAndRemove(cartId)
     .then((product) => {
       return res.status(200).send({
-        message: product,
+        message: "Deleted",
       });
     })
     .catch((error) => {
@@ -80,10 +80,62 @@ const deleteCart = async (req, res, next) => {
       });
     });
 };
+const updateQuantity = async (req, res, next) => {
+  let cartId = req.body.cartId;
+  let quantity={
+    quantity:req.body.quantity+1,
+  };
+  Cart.findByIdAndUpdate(cartId,{$set:quantity})
+    .then((response) => {
+      return res.status(200).send({
+        message: "Quantity Changed",
+      });
+    })
+    .catch((error) => {
+      return res.status(500).send({
+        message: error.message,
+      });
+    });
+};
+const removeQuantity = async (req, res, next) => {
+  let cartId = req.body.cartId;
+  let quantity={
+    quantity:req.body.quantity-1,
+  };
+  Cart.findByIdAndUpdate(cartId,{$set:quantity})
+    .then((response) => {
+      return res.status(200).send({
+        message: "Quantity Changed",
+      });
+    })
+    .catch((error) => {
+      return res.status(500).send({
+        message: error.message,
+      });
+    });
+};
+const getCart = async (req, res, next) => {
+  let cartId = req.body.cartId;
+  Cart.findById(cartId).exec()
+    .then((response) => {
+      if(response){
+      res.status(200).json(
+        {quantity:response.quantity}
+      );
+      }
+      else{
+        res.status(401).json({status:"failed"});
+      }
+    })
+    
+};
 
 module.exports = {
   showCart,
   deleteCart,
   addCart,
-  updateCart
+  updateCart,
+  updateQuantity,
+  removeQuantity,
+  getCart,
 };

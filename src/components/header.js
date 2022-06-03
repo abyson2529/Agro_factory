@@ -11,6 +11,7 @@ const Header = () =>
   function logout(){
     window.localStorage.removeItem("token")
     window.localStorage.removeItem("name")
+    localStorage.clear();
     history.push("/");
   }
     return(
