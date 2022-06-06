@@ -111,7 +111,7 @@ const Signup = () => {
       };
       try {
         const response = await axios.post(
-          "http://localhost:4000/api/register",
+          "https://git.heroku.com/agro-factory-server.git/api/register",
           data
         );
         if (response.status === 200) {

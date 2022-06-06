@@ -31,7 +31,7 @@ const Login = () => {
       password: password,
     };
     try {
-      const response = await axios.post("http://localhost:4000/api/login", data);
+      const response = await axios.post("https://git.heroku.com/agro-factory-server.git/api/login", data);
       //alert(response.status);
       if (response.status === 200) {
         window.localStorage.setItem("token", response.data.token)
