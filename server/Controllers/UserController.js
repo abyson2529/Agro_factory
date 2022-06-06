@@ -11,6 +11,11 @@ const decode = async (req, res, next) => {
   });
 };
 
+
+const index = async (req, res, next) => {
+  res.send("hello")
+};
+
 //Show User Details
 const showUserDetails = async (req, res, next) => {
   const user = await User.findOne({ username: req.user.username })
@@ -187,6 +192,7 @@ const updateAddress = async (req, res, next) => {
 };
 
 module.exports = {
+  index,
   update,
   changePassword,
   showUserDetails,

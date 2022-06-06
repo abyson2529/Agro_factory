@@ -27,8 +27,7 @@ function Manage_seeds() {
   const [filename, setFileName] = useState("");
 
   async function handleCreateSeeds(){
-    const formData = new FormData();
-
+    var formData = new FormData();
   //   let data = {
   //     name:name,
   //     price:price,
@@ -45,16 +44,22 @@ function Manage_seeds() {
     formData.append("price",price);
     formData.append("desc",description);
     formData.append("quantity",quantity);
-    console.log(formData);
-  
+    console.log(name.length,price.length);
+    if(name.length!= null && price.length!= null && description.length != null && quantity.length!= null && filename.length !=0){
     let response = await axios.post(
       "http://localhost:4000/superadmin/addSeed",formData,
       {
         headers: { Authorization: token },
       }
-    );  
+    );
+   if(response.status==200){
     handleClose()
+    window.location.reload(false);
     getSeed()
+   }
+  } else{
+    alert("Please fill all the fields")
+  }
 }
 async function deleteSeeds(id){
   let response = await axios.post(
@@ -117,11 +122,11 @@ async function deleteSeeds(id){
               <form>
                 <Form.Control type="text" placeholder="Product Name"onChange={(e)=>setName(e.target.value)} />
                 <br />
-                <Form.Control type="text" placeholder=" Product Price" onChange={(e)=>setPrice(e.target.value)}/>
+                <Form.Control type="number" placeholder=" Product Price" onChange={(e)=>setPrice(e.target.value)} min="1"/>
                 <br />
                 <Form.Control type="text" placeholder="Description" onChange={(e)=>setDescription(e.target.value)}/>
                 <br />
-                <Form.Control type="text" placeholder="Quantity" onChange={(e)=>setQuantity(e.target.value)}/>
+                <Form.Control type="number" placeholder="Quantity" onChange={(e)=>setQuantity(e.target.value)} min="1"/>
                 <br />
                 <Form.Group controlId="formFile" style={{fontSize: "18px"}}>
                   <Form.Label>Product Image</Form.Label>

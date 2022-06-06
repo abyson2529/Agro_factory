@@ -40,6 +40,7 @@ function AgriClass() {
       time: time,
       meetlink: meetlink,
     };
+    if(date.length!= null && topic.length!= null && instructor.length != null && time.length!= null&& meetlink.length!= null ){
     let response = await axios.post(
       "http://localhost:4000/superadmin/addAgriClass",
       data,
@@ -49,6 +50,10 @@ function AgriClass() {
     );
     handleClose();
     getAgriClass();
+
+  } else{
+    alert("Please fill all the fields")
+  }
   }
   async function deleteAgriClass(id) {
     let response = await axios.post(

@@ -48,13 +48,7 @@ const Profile = () => {
     <form method="post">
       <div className="row">
         <div className="col-md-4">
-          <div className="profile-img">
-            <img src={Profileimg} alt="" />
-            <div className="file btn btn-lg btn-primary">
-              Change Photo
-              <input type="file" name="file" />
-            </div>
-          </div>
+         
         </div>
         <div className="col-md-6">
           <div className="profile-head">

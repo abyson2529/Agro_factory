@@ -36,6 +36,7 @@ function Manage_mach() {
     formData.append("desc",description);
     formData.append("quantity",quantity);
     console.log(formData);
+    if(name.length!= null && price.length!= null && description.length != null && quantity.length!= null && filename.length !=0){
 
   //   let data = {
   //       name:name,
@@ -52,6 +53,9 @@ function Manage_mach() {
     );  
     handleClose()
     getMachinery()
+  } else{
+    alert("Please fill all the fields")
+  }
 }
 async function deleteMachinery(id){
   let response = await axios.post(

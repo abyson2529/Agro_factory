@@ -35,6 +35,7 @@ function Manage_fruits() {
     formData.append("desc",description);
     formData.append("quantity",quantity);
     console.log(formData);
+    if(name.length!= null && price.length!= null && description.length != null && quantity.length!= null && filename.length !=0){
 
     // let data = {
     //     name:name,
@@ -51,6 +52,9 @@ function Manage_fruits() {
     );  
     handleClose()
     getFruit()
+  } else{
+    alert("Please fill all the fields")
+  }
 }
 async function deleteFruits(id){
   let response = await axios.post(

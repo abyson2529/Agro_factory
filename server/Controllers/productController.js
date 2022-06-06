@@ -37,8 +37,10 @@ const showFertilizer = async (req, res, next) => {
 
 //Show List of fertilizer
 const showFertilizerById = async (req, res, next) => {
-  Fertilizer.findById(req.body.FertilizerId)
+  console.log(req.body.FertilizerId)
+  Fertilizer.findById(req.body.fertilizerId)
     .then((response) => {
+      console.log(response)
       return res.status(200).send({
         response,
       });

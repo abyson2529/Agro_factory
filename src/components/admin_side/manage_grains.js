@@ -35,6 +35,7 @@ function Manage_grains() {
     formData.append("desc",description);
     formData.append("quantity",quantity);
     console.log(formData);
+    if(name.length!= null && price.length!= null && description.length != null && quantity.length!= null && filename.length !=0){
   // async function handleCreateGrains(){
   //   let data = {
   //       name:name,
@@ -51,6 +52,9 @@ function Manage_grains() {
     );  
     handleClose()
     getGrain()
+  } else{
+    alert("Please fill all the fields")
+  }
 }
 async function deleteGrains(id){
   let response = await axios.post(

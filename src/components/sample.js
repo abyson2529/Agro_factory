@@ -18,8 +18,9 @@ const Sample = () => {
 
   let carttotal = 0;
   var a = [];
+  var cartdetails=[];
 
-  async function getSeed(id, cartId) {
+  async function getSeed(id, cartId, quantity) {
     let data = {
       seedId: id,
     };
@@ -29,13 +30,15 @@ const Sample = () => {
     );
     if (response2.status == 200) {
       a = cart;
-      let b = { ...response2.data.response, cartId: cartId };
+      let b = { ...response2.data.response, cartId: cartId, cquantity: quantity, };
       a.push(b);
       setCart(a);
     }
   }
 
-  async function getFertilizer(id, cartId) {
+  async function getFertilizer(id, cartId, quantity) {
+    console.log(id)
+    
     let data = {
       fertilizerId: id,
     };
@@ -45,13 +48,14 @@ const Sample = () => {
     );
     if (response2.status == 200) {
       a = cart;
-      let b = { ...response2.data.response, cartId: cartId };
+      let b = { ...response2.data.response, cartId: cartId , cquantity: quantity,};
       a.push(b);
+      console.log(a)
       setCart(a);
     }
   }
 
-  async function getMachinery(id, cartId) {
+  async function getMachinery(id, cartId, quantity) {
     let data = {
       machineryId: id,
     };
@@ -61,15 +65,16 @@ const Sample = () => {
     );
     if (response2.status == 200) {
       a = cart;
-      let b = { ...response2.data.response, cartId: cartId };
+      let b = { ...response2.data.response, cartId: cartId,  cquantity: quantity, };
       a.push(b);
       setCart(a);
     }
   }
 
-  async function getGrain(id, cartId) {
+  async function getGrain(id, cartId, quantity) {
     let data = {
       grainId: id,
+      
     };
     let response2 = await axios.post(
       "http://localhost:4000/superadmin/showGrainId",
@@ -77,7 +82,7 @@ const Sample = () => {
     );
     if (response2.status == 200) {
       a = cart;
-      let b = { ...response2.data.response, cartId: cartId };
+      let b = { ...response2.data.response, cartId: cartId,  cquantity: quantity, };
       a.push(b);
       setCart(a);
     }
@@ -99,6 +104,7 @@ const Sample = () => {
         cquantity: quantity,
       };
       a.push(b);
+   
       setCart(a);
     }
   }
@@ -115,6 +121,7 @@ const Sample = () => {
     );
     if (response.status === 200) {
       let cartItems = response.data.message;
+ 
       for (let i = 0; i < cartItems.length; i++) {
         if (cartItems[i].category == "fruits") {
           getFruit(
@@ -123,13 +130,13 @@ const Sample = () => {
             cartItems[i].quantity
           );
         } else if (cartItems[i].category == "seeds") {
-          getSeed(cartItems[i].productId, cartItems[i]._id);
+          getSeed(cartItems[i].productId, cartItems[i]._id, cartItems[i].quantity);
         } else if (cartItems[i].category == "machinery") {
-          getMachinery(cartItems[i].productId, cartItems[i]._id);
+          getMachinery(cartItems[i].productId, cartItems[i]._id, cartItems[i].quantity);
         } else if (cartItems[i].category == "fertilizer") {
-          getFertilizer(cartItems[i].productId, cartItems[i]._id);
+          getFertilizer(cartItems[i].productId, cartItems[i]._id, cartItems[i].quantity);
         } else if (cartItems[i].category == "grains") {
-          getGrain(cartItems[i].productId, cartItems[i]._id);
+          getGrain(cartItems[i].productId, cartItems[i]._id, cartItems[i].quantity);
         }
       }
     }
@@ -196,11 +203,21 @@ const Sample = () => {
     //getCart()
   }
 
-  useEffect(() => {
-    async function callcart() {
-      await getCart();
+  async function emptycart(cartdetails) {
+    for(let i=0;i<cartdetails.length;i++){
+      const data = {
+        cartId: cartdetails[i],
+      };
+      let response = await axios.post("http://localhost:5000/emptycart",data);
+      if(response.status ==200){
+        alert("order placed");
+      }
     }
-    callcart();
+  }
+ console.log(cart);
+  useEffect(() => {
+    
+    getCart();
   }, []);
   return (
     <div>
@@ -224,7 +241,7 @@ const Sample = () => {
                   <img async src={url} alt="" style={{ width: "90px" }} />
                 </div>
                 <div className="descri">
-                  <span>{a.name}</span>
+                  <span onClick={cartdetails.push(a.cartId)}>{a.name}</span>
                 </div>
                 <div className="quantity">
                   <button
@@ -258,7 +275,7 @@ const Sample = () => {
                 </div>
                 <div
                   className="total-price"
-                  onLoad={(carttotal = carttotal + a.cquantity * a.price)}
+                  onLoad={(carttotal = Number(carttotal) + Number(a.cquantity) * Number(a.price))}
                 >
                   ₹{a.price}
                 </div>
@@ -329,6 +346,7 @@ const Sample = () => {
           onPaymentDataChanged={(paymentData) => {}}
           onLoadPaymentData={(paymentRequest) => {
             console.log("load payment data", paymentRequest);
+            emptycart(cartdetails);
           }}
         />
       </Link>

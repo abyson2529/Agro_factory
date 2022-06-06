@@ -36,6 +36,7 @@ function Manage_ferti() {
     formData.append("desc",description);
     formData.append("quantity",quantity);
     console.log(formData);
+    if(name.length!= null && price.length!= null && description.length != null && quantity.length!= null && filename.length !=0){
      let response = await axios.post(
        "http://localhost:4000/superadmin/addFertilizer",formData,
        {
@@ -45,6 +46,10 @@ function Manage_ferti() {
 
     handleClose();
     getFertilizers();
+  } else{
+    alert("Please fill all the fields")
+  }
+
   }
 
   async function deleteFertilizer(id) {

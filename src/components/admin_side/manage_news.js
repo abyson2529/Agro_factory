@@ -38,6 +38,7 @@ function Manage_news() {
     formData.append("description",description);
     formData.append("date",date);
     console.log(formData);
+    if(title.length!= null && description.length != null && date.length!= null && filename.length !=0){
     let response = await axios.post(
       "http://localhost:4000/superadmin/addNews",formData,
       {
@@ -46,6 +47,9 @@ function Manage_news() {
     );  
     handleClose()
     getNews()
+  } else{
+    alert("Please fill all the fields")
+  }
 }
 async function deleteNews(id){
   let response = await axios.post(

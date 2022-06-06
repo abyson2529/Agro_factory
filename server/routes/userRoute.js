@@ -5,6 +5,8 @@ const UserController = require("../Controllers/userController");
 const Authenticate = require("../Middleware/authenticate")
 const Chatbot = require("../Controllers/ChatbotController")
 
+
+router.get("/",Authenticate, UserController.index)
 //show Details
 router.get("/showDetails",Authenticate, UserController.showUserDetails)
 
